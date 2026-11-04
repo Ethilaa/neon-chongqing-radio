@@ -2,12 +2,74 @@
  * radio.js
  * Handheld Console Music Play Station (Exact 1:1 replica of PDF Page 5).
  * Play, pause, station switching, volume, visualizer, custom audio upload,
- * and auto-play "I Really Want to Stay at Your House" when sitting by the river!
+ * persistent IndexedDB storage, and guaranteed auto-play for
+ * "I Really Want to Stay at Your House" when sitting by the river!
  */
 
+// ============================================================================
+// IndexedDB: Permanently save user-uploaded custom tracks in browser storage
+// ============================================================================
+const IDB_NAME = 'NeonChongqingRadioDB';
+const IDB_VERSION = 1;
+const IDB_STORE = 'custom_audio_tracks';
+
+function openAudioDB() {
+  return new Promise((resolve) => {
+    if (!window.indexedDB) return resolve(null);
+    try {
+      const req = window.indexedDB.open(IDB_NAME, IDB_VERSION);
+      req.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains(IDB_STORE)) {
+          db.createObjectStore(IDB_STORE, { keyPath: 'id', autoIncrement: true });
+        }
+      };
+      req.onsuccess = (e) => resolve(e.target.result);
+      req.onerror = () => resolve(null);
+    } catch (e) {
+      resolve(null);
+    }
+  });
+}
+
+function saveTrackToIndexedDB(trackObj) {
+  return new Promise(async (resolve) => {
+    const db = await openAudioDB();
+    if (!db) return resolve(false);
+    try {
+      const tx = db.transaction(IDB_STORE, 'readwrite');
+      const store = tx.objectStore(IDB_STORE);
+      store.add(trackObj);
+      tx.oncomplete = () => resolve(true);
+      tx.onerror = () => resolve(false);
+    } catch (e) {
+      resolve(false);
+    }
+  });
+}
+
+function loadAllTracksFromIndexedDB() {
+  return new Promise(async (resolve) => {
+    const db = await openAudioDB();
+    if (!db) return resolve([]);
+    try {
+      const tx = db.transaction(IDB_STORE, 'readonly');
+      const store = tx.objectStore(IDB_STORE);
+      const req = store.getAll();
+      req.onsuccess = () => resolve(req.result || []);
+      req.onerror = () => resolve([]);
+    } catch (e) {
+      resolve([]);
+    }
+  });
+}
+
+// ============================================================================
+// Handheld Console Music Player Class
+// ============================================================================
 class HandheldConsolePlayer {
   constructor() {
-    this.stations = [
+    this.defaultStations = [
       {
         id: 'edgerunners',
         name: 'CYBERPUNK EDGERUNNERS',
@@ -16,7 +78,9 @@ class HandheldConsolePlayer {
             title: 'I Really Want to Stay at Your House',
             artist: 'Rosa Walton / Cyberpunk 2077',
             src: 'assets/audio/i_really_want_to_stay_at_your_house.wav',
-            badge: 'EDGERUNNERS'
+            badge: 'EDGERUNNERS',
+            stationId: 'edgerunners',
+            stationName: 'CYBERPUNK EDGERUNNERS'
           }
         ]
       },
@@ -28,7 +92,9 @@ class HandheldConsolePlayer {
             title: 'Neon Overdrive 2077',
             artist: 'Cyber Pulse Reverie',
             src: 'assets/audio/synthwave_overdrive.wav',
-            badge: 'SYNTHWAVE'
+            badge: 'SYNTHWAVE',
+            stationId: 'synthwave',
+            stationName: 'NEON SYNTHWAVE'
           }
         ]
       },
@@ -40,24 +106,25 @@ class HandheldConsolePlayer {
             title: 'Chongqing City Nights',
             artist: 'Mimi 88.8 FM',
             src: 'assets/audio/lofi_city_nights.wav',
-            badge: 'LO-FI'
+            badge: 'LO-FI',
+            stationId: 'lofi',
+            stationName: 'CHILLWAVE LO-FI'
           }
         ]
       }
     ];
 
-    // Flattened playlist with station tags
+    this.stations = JSON.parse(JSON.stringify(this.defaultStations));
+
+    // Active flattened playlist
     this.playlist = [];
-    this.stations.forEach(st => {
-      st.tracks.forEach(tr => {
-        this.playlist.push({ ...tr, stationId: st.id, stationName: st.name });
-      });
-    });
+    this.rebuildPlaylist();
 
     this.currentStationIndex = 0;
     this.currentIndex = 0;
     this.isPlaying = false;
     this.currentHowl = null;
+    this.html5Audio = null;
 
     // DOM Elements
     this.dockEl = document.getElementById('corner-player-dock');
@@ -75,14 +142,68 @@ class HandheldConsolePlayer {
     this.init();
   }
 
-  init() {
+  rebuildPlaylist() {
+    this.playlist = [];
+    this.stations.forEach(st => {
+      st.tracks.forEach(tr => {
+        this.playlist.push({ ...tr, stationId: st.id, stationName: st.name });
+      });
+    });
+  }
+
+  async init() {
     this.setupDockToggle();
     this.setupPlaybackControls();
     this.setupPhysicalConsoleButtons();
     this.setupCustomUpload();
     this.setupArcadeLauncher();
     this.startEqualizerLoop();
+
+    // 1. Try to load synced repository playlist.json
+    await this.loadSyncedPlaylist();
+
+    // 2. Restore any custom user tracks permanently saved in IndexedDB
+    await this.restoreCustomTracksFromIndexedDB();
+
     this.updateDisplay();
+  }
+
+  async loadSyncedPlaylist() {
+    try {
+      const res = await fetch('assets/audio/playlist.json');
+      if (res.ok) {
+        const synced = await res.json();
+        if (Array.isArray(synced) && synced.length > 0) {
+          // Replace or augment tracks
+          this.playlist = synced;
+          console.log(`Loaded ${synced.length} permanent songs from playlist.json`);
+        }
+      }
+    } catch (e) {
+      // In offline file:// or when playlist.json is not yet fetched, keep defaultStations
+    }
+  }
+
+  async restoreCustomTracksFromIndexedDB() {
+    try {
+      const savedTracks = await loadAllTracksFromIndexedDB();
+      if (savedTracks && savedTracks.length > 0) {
+        savedTracks.forEach(item => {
+          const url = URL.createObjectURL(item.blob);
+          this.playlist.push({
+            title: item.title,
+            artist: item.artist || 'Local Upload',
+            src: url,
+            badge: 'SAVED',
+            stationId: 'custom',
+            stationName: 'MY SAVED TRACKS'
+          });
+        });
+        console.log(`Restored ${savedTracks.length} tracks permanently from IndexedDB`);
+      }
+    } catch (e) {
+      console.warn('Could not restore tracks from IndexedDB:', e);
+    }
   }
 
   setupDockToggle() {
@@ -115,6 +236,7 @@ class HandheldConsolePlayer {
         const val = parseFloat(e.target.value);
         if (window.audioMgr) window.audioMgr.setVolume(val);
         if (this.currentHowl) this.currentHowl.volume(val);
+        if (this.html5Audio) this.html5Audio.volume = val;
       });
     }
 
@@ -163,28 +285,26 @@ class HandheldConsolePlayer {
     const dpadUp = document.querySelector('.dpad-btn.dpad-up');
     if (dpadUp) {
       dpadUp.addEventListener('click', () => {
-        const cur = window.audioMgr ? window.audioMgr.volume : 0.7;
-        const nxt = Math.min(1.0, cur + 0.1);
-        if (window.audioMgr) window.audioMgr.setVolume(nxt);
-        if (this.currentHowl) this.currentHowl.volume(nxt);
-        if (this.volSlider) this.volSlider.value = nxt;
-        if (window.audioMgr) window.audioMgr.playClickSound();
+        if (this.volSlider) {
+          const v = Math.min(1, parseFloat(this.volSlider.value) + 0.1);
+          this.volSlider.value = v;
+          this.volSlider.dispatchEvent(new Event('input'));
+        }
       });
     }
 
     const dpadDown = document.querySelector('.dpad-btn.dpad-down');
     if (dpadDown) {
       dpadDown.addEventListener('click', () => {
-        const cur = window.audioMgr ? window.audioMgr.volume : 0.7;
-        const nxt = Math.max(0.0, cur - 0.1);
-        if (window.audioMgr) window.audioMgr.setVolume(nxt);
-        if (this.currentHowl) this.currentHowl.volume(nxt);
-        if (this.volSlider) this.volSlider.value = nxt;
-        if (window.audioMgr) window.audioMgr.playClickSound();
+        if (this.volSlider) {
+          const v = Math.max(0, parseFloat(this.volSlider.value) - 0.1);
+          this.volSlider.value = v;
+          this.volSlider.dispatchEvent(new Event('input'));
+        }
       });
     }
 
-    // SELECT Button: Cycle Stations
+    // SELECT Button: Cycle Radio Station
     const btnSelect = document.querySelector('.btn-pill-select');
     if (btnSelect) {
       btnSelect.addEventListener('click', () => {
@@ -207,28 +327,44 @@ class HandheldConsolePlayer {
     const input = document.getElementById('custom-audio-input');
     if (!input) return;
 
-    input.addEventListener('change', (e) => {
+    input.addEventListener('change', async (e) => {
       const files = e.target.files;
       if (!files || files.length === 0) return;
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const url = URL.createObjectURL(file);
-        const name = file.name.replace(/\.[^/.]+$/, '');
+        const cleanName = file.name.replace(/\.[^/.]+$/, '').replace(/[_\-]+/g, ' ').trim();
 
-        this.playlist.unshift({
-          title: name,
+        const trackObj = {
+          title: cleanName,
           artist: 'Custom User Track',
           src: url,
-          badge: 'CUSTOM',
+          badge: 'SAVED',
           stationId: 'custom',
-          stationName: 'CUSTOM AUDIO'
+          stationName: 'MY SAVED TRACKS'
+        };
+
+        // Add to active playlist
+        this.playlist.unshift(trackObj);
+
+        // Permanently persist to browser's IndexedDB
+        await saveTrackToIndexedDB({
+          title: cleanName,
+          artist: 'Custom User Track',
+          blob: file,
+          name: file.name,
+          date: Date.now()
         });
       }
 
       this.currentIndex = 0;
       this.playTrack(0);
+
       if (window.audioMgr) window.audioMgr.playCoinSound();
+      if (window.cyberMenu && typeof window.cyberMenu.showToast === 'function') {
+        window.cyberMenu.showToast(`✦ ${files.length} SONG(S) PERMANENTLY SAVED TO BROWSER ✦`);
+      }
     });
   }
 
@@ -244,7 +380,6 @@ class HandheldConsolePlayer {
   cycleStation() {
     this.currentStationIndex = (this.currentStationIndex + 1) % this.stations.length;
     const st = this.stations[this.currentStationIndex];
-    // Find first track belonging to this station
     const idx = this.playlist.findIndex(t => t.stationId === st.id);
     if (idx !== -1) {
       this.playTrack(idx);
@@ -259,48 +394,121 @@ class HandheldConsolePlayer {
     }
   }
 
+  // ==========================================================================
+  // Guaranteed Dual Audio Engine (Howler + Native HTML5 Audio Fallback)
+  // ==========================================================================
   playTrack(idx) {
+    if (this.playlist.length === 0) return;
     if (idx < 0) idx = this.playlist.length - 1;
     if (idx >= this.playlist.length) idx = 0;
     this.currentIndex = idx;
 
     const track = this.playlist[this.currentIndex];
 
+    // Clean up previous Howler instance
     if (this.currentHowl) {
-      this.currentHowl.stop();
-      this.currentHowl.unload();
+      try {
+        this.currentHowl.stop();
+        this.currentHowl.unload();
+      } catch (e) {}
       this.currentHowl = null;
     }
 
-    if (track && track.src) {
-      this.currentHowl = new Howl({
-        src: [track.src],
-        html5: true,
-        volume: window.audioMgr ? window.audioMgr.volume : 0.7,
-        loop: true,
-        onplay: () => {
-          this.isPlaying = true;
-          this.updateDisplay();
-        },
-        onpause: () => {
-          this.isPlaying = false;
-          this.updateDisplay();
-        },
-        onstop: () => {
-          this.isPlaying = false;
-          this.updateDisplay();
-        }
-      });
-      this.currentHowl.play();
+    // Clean up previous HTML5 audio
+    if (this.html5Audio) {
+      try {
+        this.html5Audio.pause();
+        this.html5Audio.src = '';
+      } catch (e) {}
+      this.html5Audio = null;
+    }
+
+    if (!track || !track.src) return;
+
+    const vol = window.audioMgr ? window.audioMgr.volume : 0.7;
+
+    const onPlaySuccess = () => {
+      this.isPlaying = true;
+      this.updateDisplay();
+    };
+
+    const onPauseState = () => {
+      this.isPlaying = false;
+      this.updateDisplay();
+    };
+
+    let usedHowler = false;
+    if (typeof Howl !== 'undefined') {
+      try {
+        this.currentHowl = new Howl({
+          src: [track.src],
+          html5: true,
+          volume: vol,
+          loop: true,
+          onloaderror: (id, err) => {
+            console.warn('Howler error, seamlessly falling back to HTML5 audio:', err);
+            this.playWithHtml5Audio(track.src, vol, onPlaySuccess, onPauseState);
+          },
+          onplayerror: (id, err) => {
+            console.warn('Howler play error, unlocking audio:', err);
+            if (this.currentHowl) {
+              this.currentHowl.once('unlock', () => {
+                if (this.currentHowl) this.currentHowl.play();
+              });
+            }
+          },
+          onplay: onPlaySuccess,
+          onpause: onPauseState,
+          onstop: onPauseState
+        });
+        this.currentHowl.play();
+        usedHowler = true;
+      } catch (e) {
+        usedHowler = false;
+      }
+    }
+
+    if (!usedHowler) {
+      this.playWithHtml5Audio(track.src, vol, onPlaySuccess, onPauseState);
     }
 
     this.isPlaying = true;
     this.updateDisplay();
   }
 
+  playWithHtml5Audio(src, vol, onPlaySuccess, onPauseState) {
+    try {
+      this.html5Audio = new Audio(src);
+      this.html5Audio.loop = true;
+      this.html5Audio.volume = vol;
+      this.html5Audio.onplay = onPlaySuccess;
+      this.html5Audio.onpause = onPauseState;
+      this.html5Audio.onended = onPauseState;
+
+      const p = this.html5Audio.play();
+      if (p !== undefined) {
+        p.then(onPlaySuccess).catch((err) => {
+          console.warn('HTML5 Audio autoplay prevented. Will play on next interaction:', err);
+          const resumeOnInteraction = () => {
+            if (this.html5Audio) this.html5Audio.play().catch(() => {});
+            window.removeEventListener('click', resumeOnInteraction);
+            window.removeEventListener('keydown', resumeOnInteraction);
+          };
+          window.addEventListener('click', resumeOnInteraction, { once: true });
+          window.addEventListener('keydown', resumeOnInteraction, { once: true });
+        });
+      }
+    } catch (e) {
+      console.error('HTML5 audio error:', e);
+    }
+  }
+
   pause() {
     if (this.currentHowl) {
-      this.currentHowl.pause();
+      try { this.currentHowl.pause(); } catch (e) {}
+    }
+    if (this.html5Audio) {
+      try { this.html5Audio.pause(); } catch (e) {}
     }
     this.isPlaying = false;
     this.updateDisplay();
@@ -314,9 +522,53 @@ class HandheldConsolePlayer {
     this.playTrack(this.currentIndex - 1);
   }
 
+  // ==========================================================================
+  // Guaranteed River Pier Bench Auto-Play for Rosa Walton
+  // ==========================================================================
+  playEdgerunnersBenchSong() {
+    if (window.audioMgr) {
+      window.audioMgr.initAudioContext();
+    }
+
+    // 1. Find the track matching Rosa Walton or Cyberpunk Edgerunners
+    let idx = this.playlist.findIndex(t => {
+      const title = (t.title || '').toLowerCase();
+      const artist = (t.artist || '').toLowerCase();
+      const src = (t.src || '').toLowerCase();
+      return title.includes('stay') || title.includes('rosa') ||
+             artist.includes('rosa') || artist.includes('edgerunners') ||
+             src.includes('stay') || src.includes('house');
+    });
+
+    if (idx !== -1) {
+      this.playTrack(idx);
+    } else {
+      // Direct fallback to index 0 (Edgerunners station)
+      this.playTrack(0);
+    }
+
+    if (window.cyberMenu && typeof window.cyberMenu.showToast === 'function') {
+      window.cyberMenu.showToast('♫ NOW PLAYING: "I Really Want to Stay at Your House" - Rosa Walton');
+    }
+    return true;
+  }
+
   playSongByName(titleQuery) {
+    if (!titleQuery) return false;
     const q = titleQuery.toLowerCase();
-    const idx = this.playlist.findIndex(t => t.title.toLowerCase().includes(q));
+
+    // Check if query is asking for the river bench stay song
+    if (q.includes('stay') || q.includes('house') || q.includes('edgerunners') || q.includes('rosa')) {
+      return this.playEdgerunnersBenchSong();
+    }
+
+    const idx = this.playlist.findIndex(t => {
+      const title = (t.title || '').toLowerCase();
+      const artist = (t.artist || '').toLowerCase();
+      const src = (t.src || '').toLowerCase();
+      return title.includes(q) || artist.includes(q) || src.includes(q);
+    });
+
     if (idx !== -1) {
       this.playTrack(idx);
       return true;

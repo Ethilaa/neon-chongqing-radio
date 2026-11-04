@@ -1,0 +1,26 @@
+[
+  {
+    "title": "I Really Want to Stay at Your House",
+    "artist": "Rosa Walton / Cyberpunk 2077",
+    "src": "assets/audio/i_really_want_to_stay_at_your_house.wav",
+    "badge": "EDGERUNNERS",
+    "stationId": "edgerunners",
+    "stationName": "CYBERPUNK EDGERUNNERS"
+  },
+  {
+    "title": "Lofi City Nights",
+    "artist": "Neon Chongqing Radio",
+    "src": "assets/audio/lofi_city_nights.wav",
+    "badge": "LO-FI",
+    "stationId": "lofi",
+    "stationName": "CHILLWAVE LO-FI"
+  },
+  {
+    "title": "Synthwave Overdrive",
+    "artist": "Cyber Pulse",
+    "src": "assets/audio/synthwave_overdrive.wav",
+    "badge": "SYNTHWAVE",
+    "stationId": "synthwave",
+    "stationName": "NEON SYNTHWAVE"
+  }
+]

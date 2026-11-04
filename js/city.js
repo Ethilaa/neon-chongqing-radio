@@ -288,6 +288,11 @@ class InteractiveChongqingWorld {
     if (standBtn) {
       standBtn.addEventListener('click', () => this.standUp());
     }
+
+    if (this.promptEl) {
+      this.promptEl.style.cursor = 'pointer';
+      this.promptEl.addEventListener('click', () => this.handleInteract());
+    }
   }
 
   setupCameraViewButtons() {
@@ -409,7 +414,11 @@ class InteractiveChongqingWorld {
 
     // Auto-trigger song from cyberpunk ("I Really Want to Stay at Your House by Rosa Walton")!
     if (spot.id === 'river_bench' && window.consolePlayer) {
-      window.consolePlayer.playSongByName("I Really Want to Stay at Your House");
+      if (typeof window.consolePlayer.playEdgerunnersBenchSong === 'function') {
+        window.consolePlayer.playEdgerunnersBenchSong();
+      } else {
+        window.consolePlayer.playSongByName("I Really Want to Stay at Your House");
+      }
     }
 
     if (window.audioMgr) window.audioMgr.playClickSound();
@@ -430,7 +439,7 @@ class InteractiveChongqingWorld {
       const dist = Math.abs((this.player.x + this.player.width / 2) - checkX);
       const distY = Math.abs((this.player.y + this.player.height / 2) - checkY);
 
-      if (dist < 80 && distY < 75) {
+      if (dist < 130 && distY < 85) {
         if (s.type === 'seat' && !this.player.isSitting) {
           this.sitDownAt(s);
           return;
@@ -597,7 +606,7 @@ class InteractiveChongqingWorld {
       const checkY = s.sitY || s.y;
       const dist = Math.abs((this.player.x + this.player.width / 2) - checkX);
       const distY = Math.abs((this.player.y + this.player.height / 2) - checkY);
-      if (dist < 80 && distY < 75) {
+      if (dist < 130 && distY < 85) {
         activeSpot = s;
         break;
       }
