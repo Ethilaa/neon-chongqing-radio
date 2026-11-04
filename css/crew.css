@@ -1,0 +1,182 @@
+/* ==========================================================================
+   CREW FEATURE - Character Selection (Kuromi/Kakya Style, Reference Page 4 & 7)
+   ========================================================================== */
+
+.crew-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+}
+
+.crew-header-title {
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  color: var(--neon-pink);
+  text-align: center;
+  text-shadow: 0 0 8px var(--neon-pink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+/* Active Character Spotlight Card */
+.active-char-spotlight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(18, 7, 38, 0.9);
+  border: 2px solid var(--neon-pink);
+  border-radius: 8px;
+  padding: 8px 12px;
+  box-shadow: 0 0 15px rgba(255, 60, 172, 0.3);
+}
+
+.spotlight-sprite-box {
+  width: 54px;
+  height: 54px;
+  background: #090317;
+  border: 1.5px solid var(--neon-cyan);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: inset 0 0 8px rgba(56, 249, 255, 0.3);
+}
+
+.spotlight-sprite-box img {
+  width: 48px;
+  height: 48px;
+  image-rendering: pixelated;
+  animation: spriteBounce 1.2s infinite ease-in-out;
+}
+
+@keyframes spriteBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.spotlight-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.spotlight-name {
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.spotlight-role {
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  color: var(--neon-cyan);
+}
+
+.spotlight-quote {
+  font-family: var(--font-terminal);
+  font-size: 13px;
+  color: var(--neon-yellow);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Character Selector Grid */
+.crew-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.crew-card {
+  background: rgba(14, 6, 28, 0.85);
+  border: 1.5px solid var(--neon-violet);
+  border-radius: 6px;
+  padding: 6px 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.crew-card:hover {
+  border-color: var(--neon-cyan);
+  background: rgba(56, 249, 255, 0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 0 10px rgba(56, 249, 255, 0.4);
+}
+
+.crew-card.selected {
+  border-color: var(--neon-pink);
+  background: rgba(255, 60, 172, 0.2);
+  box-shadow: 0 0 12px var(--neon-pink);
+}
+
+.crew-thumb {
+  width: 38px;
+  height: 38px;
+  image-rendering: pixelated;
+}
+
+.crew-card-name {
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.crew-signature-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  box-shadow: 0 0 4px currentColor;
+}
+
+/* Stats Sheet Panel */
+.crew-stats-sheet {
+  background: rgba(10, 4, 22, 0.85);
+  border: 1px dashed rgba(56, 249, 255, 0.4);
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  color: var(--text-dim);
+}
+
+.stat-bar-track {
+  width: 60%;
+  height: 6px;
+  background: #170a2f;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  background: var(--neon-cyan);
+  box-shadow: 0 0 6px var(--neon-cyan);
+  transition: width 0.3s ease;
+}
+

@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 350" width="100%" height="100%">
+  <defs>
+    <filter id="pinkGlow">
+      <feGaussianBlur stdDeviation="4" result="b1"/>
+      <feMerge>
+        <feMergeNode in="b1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <linearGradient id="kBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#08020f"/>
+      <stop offset="100%" stop-color="#1d0630"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="350" fill="url(#kBg)" stroke="#ff3cac" stroke-width="3"/>
+  <rect x="8" y="8" width="284" height="334" fill="none" stroke="#7b5cff" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- Top bar -->
+  <text x="20" y="36" font-family="'Press Start 2P', monospace" font-size="12" fill="#ff3cac" filter="url(#pinkGlow)">✦ KAKYA / KURO ✦</text>
+  <text x="240" y="36" font-family="'VT323', monospace" font-size="18" fill="#38f9ff">v2.077</text>
+
+  <!-- Big Cat/Bat Ears -->
+  <path d="M 60 140 L 40 50 L 110 90 Z" fill="#0d0417" stroke="#ff3cac" stroke-width="3" filter="url(#pinkGlow)"/>
+  <polygon points="62,125 50,68 98,96" fill="#ff3cac" opacity="0.4"/>
+
+  <path d="M 240 140 L 260 50 L 190 90 Z" fill="#0d0417" stroke="#ff3cac" stroke-width="3" filter="url(#pinkGlow)"/>
+  <polygon points="238,125 250,68 202,96" fill="#ff3cac" opacity="0.4"/>
+
+  <!-- Head Base -->
+  <ellipse cx="150" cy="165" rx="85" ry="75" fill="#0d0417" stroke="#38f9ff" stroke-width="3"/>
+
+  <!-- Jester / Demon Cat Hood points -->
+  <circle cx="150" cy="85" r="14" fill="#ff3cac"/>
+  <text x="150" y="90" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="10" fill="#ffffff">☠</text>
+
+  <!-- Huge Kawaii Eyes -->
+  <ellipse cx="115" cy="160" rx="20" ry="26" fill="#ffffff"/>
+  <ellipse cx="115" cy="160" rx="14" ry="20" fill="#0a0614"/>
+  <ellipse cx="118" cy="152" rx="6" ry="9" fill="#ff3cac"/>
+  <circle cx="112" cy="150" r="4" fill="#ffffff"/>
+  <circle cx="120" cy="168" r="2.5" fill="#38f9ff"/>
+
+  <ellipse cx="185" cy="160" rx="20" ry="26" fill="#ffffff"/>
+  <ellipse cx="185" cy="160" rx="14" ry="20" fill="#0a0614"/>
+  <ellipse cx="182" cy="152" rx="6" ry="9" fill="#ff3cac"/>
+  <circle cx="178" cy="150" r="4" fill="#ffffff"/>
+  <circle cx="186" cy="168" r="2.5" fill="#38f9ff"/>
+
+  <!-- Nose & Wicked Cute Smile -->
+  <polygon points="148,185 152,185 150,188" fill="#ff3cac"/>
+  <path d="M 135 198 Q 150 215 165 198 Q 150 204 135 198 Z" fill="#ff3cac"/>
+  <!-- Cute little fangs -->
+  <polygon points="142,199 146,199 144,204" fill="#ffffff"/>
+  <polygon points="154,199 158,199 156,204" fill="#ffffff"/>
+
+  <!-- Cheeks -->
+  <ellipse cx="92" cy="180" rx="10" ry="5" fill="#ff3cac" opacity="0.6"/>
+  <ellipse cx="208" cy="180" rx="10" ry="5" fill="#ff3cac" opacity="0.6"/>
+
+  <!-- Cyber collar with bell -->
+  <rect x="110" y="235" width="80" height="15" rx="5" fill="#7b5cff"/>
+  <circle cx="150" cy="242" r="8" fill="#ffe14d" stroke="#0a0614" stroke-width="2"/>
+
+  <!-- Bottom Message -->
+  <rect x="25" y="280" width="250" height="42" rx="6" fill="#150a2b" stroke="#38f9ff" stroke-width="1.5"/>
+  <text x="150" y="306" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="11" fill="#ffe14d">RANDOM MODE NO.08</text>
+</svg>

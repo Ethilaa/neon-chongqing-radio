@@ -1,0 +1,501 @@
+/* ==========================================================================
+   NEON CHONGQING RADIO - Global Styles & Cute Cyberpunk Theme
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+:root {
+  --bg-night: #080415;
+  --bg-deep: #05020d;
+  --bg-card: rgba(18, 10, 36, 0.88);
+  --neon-pink: #ff3cac;
+  --neon-cyan: #38f9ff;
+  --neon-violet: #7b5cff;
+  --neon-yellow: #ffe14d;
+  --neon-green: #39ff14;
+  --text-primary: #ffffff;
+  --text-dim: #a5b0cb;
+  --console-blue: #7ad7f0;
+  --font-pixel: 'Press Start 2P', monospace, sans-serif;
+  --font-terminal: 'VT323', monospace, sans-serif;
+  --char-trail-color: #ff3cac;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-night);
+  color: var(--text-primary);
+  font-family: var(--font-terminal);
+  font-size: 18px;
+  cursor: none; /* Handled by cute glitter cursor */
+}
+
+/* ==========================================================================
+   CUTE CYBERPUNK GLITTER CURSOR
+   ========================================================================== */
+#cute-cursor-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  pointer-events: none;
+  z-index: 100000;
+  transform: translate(-50%, -50%);
+  transition: transform 0.04s ease-out;
+}
+
+.cute-cursor-icon {
+  width: 30px;
+  height: 30px;
+  filter: drop-shadow(0 0 6px var(--char-trail-color));
+  animation: cursorBob 1.6s infinite ease-in-out alternate;
+}
+
+@keyframes cursorBob {
+  0% { transform: scale(1) rotate(-5deg); }
+  100% { transform: scale(1.12) rotate(8deg); }
+}
+
+/* Sparkling Cyberpunk Glitter Particles */
+.glitter-particle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99999;
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  line-height: 1;
+  text-shadow: 0 0 8px currentColor, 0 0 14px currentColor;
+  transform: translate(-50%, -50%);
+  animation: glitterSparkle 0.65s cubic-bezier(0.2, 0.8, 0.4, 1) forwards;
+}
+
+@keyframes glitterSparkle {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.3) rotate(0deg);
+  }
+  50% {
+    opacity: 0.85;
+    transform: translate(calc(-50% + var(--drift-x)), calc(-50% + var(--drift-y))) scale(1) rotate(90deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--drift-x) * 1.5), calc(-50% + var(--drift-y) * 1.5)) scale(0.2) rotate(180deg);
+  }
+}
+
+/* Mobile fallback */
+@media (hover: none) and (pointer: coarse) {
+  html, body {
+    cursor: auto !important;
+  }
+  #cute-cursor-container, .glitter-particle {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   Global Button & CRT Elements
+   ========================================================================== */
+.crt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 900;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 3px;
+  opacity: 0.55;
+}
+
+.pixel-btn {
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 8px 16px;
+  background: var(--bg-card);
+  color: var(--neon-cyan);
+  border: 1.5px solid var(--neon-cyan);
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+  box-shadow: 0 0 10px rgba(56, 249, 255, 0.3);
+}
+
+.pixel-btn:hover {
+  background: var(--neon-cyan);
+  color: #05020a;
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px var(--neon-cyan);
+}
+
+.pixel-btn.pink {
+  color: var(--neon-pink);
+  border-color: var(--neon-pink);
+  box-shadow: 0 0 10px rgba(255, 60, 172, 0.3);
+}
+
+.pixel-btn.pink:hover {
+  background: var(--neon-pink);
+  color: #fff;
+  box-shadow: 0 0 20px var(--neon-pink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+
+/* ==========================================================================
+   ENTERING THE CITY - CINEMATIC SPLASH SCREEN (Pixel Skyline Experience)
+   ========================================================================== */
+#city-splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+  background: #060212;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+#city-splash-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Background Artwork from the user's uploaded pixel cityscape */
+.splash-skyline-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('../assets/images/neon-chongqing-skyline-art.jpg') center bottom / cover no-repeat;
+  z-index: 1;
+  opacity: 0.96;
+  filter: saturate(1.15) brightness(1.02);
+}
+
+.splash-vignette-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 50%, rgba(10, 4, 25, 0.25) 0%, rgba(5, 2, 14, 0.75) 75%, #03010a 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Cyber corner stamps matching the uploaded artwork */
+.splash-top-left-tag {
+  position: absolute;
+  top: 22px;
+  left: 28px;
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  color: var(--neon-cyan);
+  text-shadow: 0 0 10px var(--neon-cyan);
+  z-index: 4;
+  letter-spacing: 2px;
+  pointer-events: none;
+}
+
+.splash-top-right-tag {
+  position: absolute;
+  top: 22px;
+  right: 28px;
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  color: var(--neon-pink);
+  text-shadow: 0 0 10px var(--neon-pink);
+  z-index: 4;
+  letter-spacing: 2px;
+  pointer-events: none;
+}
+
+.splash-content-box {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  max-width: 680px;
+  padding: 30px 36px;
+  background: rgba(12, 5, 26, 0.88);
+  border: 2.5px solid var(--neon-cyan);
+  border-radius: 18px;
+  box-shadow: 0 0 50px rgba(56, 249, 255, 0.45), inset 0 0 30px rgba(123, 92, 255, 0.25);
+  backdrop-filter: blur(12px);
+}
+
+.splash-tagline {
+  font-family: var(--font-pixel);
+  font-size: 10.5px;
+  letter-spacing: 3px;
+  color: var(--neon-cyan);
+  text-shadow: 0 0 8px var(--neon-cyan);
+}
+
+.splash-main-title {
+  font-family: var(--font-pixel);
+  font-size: 34px;
+  line-height: 1.25;
+  color: #ffffff;
+  text-shadow: 0 0 20px var(--neon-pink), 0 0 40px var(--neon-pink);
+  letter-spacing: 3px;
+}
+
+.splash-sub-prompt {
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  color: var(--neon-cyan);
+  letter-spacing: 1.5px;
+  animation: promptBlink 1.4s infinite ease-in-out alternate;
+  margin-top: -4px;
+}
+
+@keyframes promptBlink {
+  from { opacity: 0.6; text-shadow: 0 0 4px var(--neon-cyan); }
+  to { opacity: 1; text-shadow: 0 0 14px var(--neon-cyan), 0 0 24px var(--neon-cyan); }
+}
+
+.splash-desc {
+  font-family: var(--font-terminal);
+  font-size: 19px;
+  line-height: 1.4;
+  color: #c9d5f5;
+}
+
+.splash-pillars-row {
+  display: flex;
+  gap: 14px;
+  margin: 4px 0;
+}
+
+.splash-pillar-badge {
+  font-family: var(--font-pixel);
+  font-size: 8.5px;
+  padding: 6px 12px;
+  background: rgba(123, 92, 255, 0.25);
+  border: 1.5px solid var(--neon-violet);
+  border-radius: 6px;
+  color: var(--neon-yellow);
+}
+
+.splash-enter-btn {
+  font-family: var(--font-pixel);
+  font-size: 13px;
+  letter-spacing: 2px;
+  padding: 14px 36px;
+  background: linear-gradient(90deg, #ff3cac, #7b5cff);
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 0 25px var(--neon-pink);
+  transition: all 0.2s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+.splash-enter-btn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 40px var(--neon-cyan);
+  border-color: var(--neon-cyan);
+}
+
+/* ==========================================================================
+   CYBERPUNK OS MENU MODAL (Flow: Home > City > Mini Games / Station / Settings)
+   ========================================================================== */
+#cyberpunk-menu-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5000;
+  background: rgba(5, 2, 12, 0.9);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+#cyberpunk-menu-modal.open {
+  display: flex;
+}
+
+.menu-window-shell {
+  width: clamp(420px, 90vw, 820px);
+  max-height: 88vh;
+  background: #090317;
+  border: 3px solid var(--neon-cyan);
+  border-radius: 18px;
+  box-shadow: 0 0 50px rgba(56, 249, 255, 0.45);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.menu-header-bar {
+  background: linear-gradient(90deg, #18093c, #0d0422);
+  border-bottom: 2px solid var(--neon-cyan);
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu-title-text {
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  color: var(--neon-cyan);
+  letter-spacing: 2px;
+}
+
+.menu-close-btn {
+  background: transparent;
+  border: 1.5px solid var(--neon-pink);
+  color: var(--neon-pink);
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.menu-close-btn:hover {
+  background: var(--neon-pink);
+  color: #fff;
+  box-shadow: 0 0 14px var(--neon-pink);
+}
+
+/* Tab Navigation Bar */
+.menu-nav-tabs-bar {
+  display: flex;
+  background: #110526;
+  border-bottom: 2px solid rgba(56, 249, 255, 0.3);
+  overflow-x: auto;
+}
+
+.menu-nav-tab {
+  flex: 1;
+  text-align: center;
+  padding: 12px 10px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-family: var(--font-pixel);
+  font-size: 9px;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.menu-nav-tab:hover {
+  color: #ffffff;
+  background: rgba(56, 249, 255, 0.08);
+}
+
+.menu-nav-tab.active {
+  color: var(--neon-cyan);
+  border-bottom-color: var(--neon-cyan);
+  background: rgba(56, 249, 255, 0.15);
+  text-shadow: 0 0 10px var(--neon-cyan);
+}
+
+/* Tab Panels Content */
+.menu-panels-container {
+  padding: 22px;
+  overflow-y: auto;
+  max-height: calc(88vh - 120px);
+}
+
+.menu-tab-panel {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.menu-tab-panel.active {
+  display: flex;
+}
+
+/* Cards & Layout inside Tabs */
+.menu-card {
+  background: rgba(19, 8, 38, 0.85);
+  border: 1.5px solid rgba(123, 92, 255, 0.5);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.menu-card-title {
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  color: var(--neon-yellow);
+}
+
+/* Cyber Toast */
+.cyber-toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(30px);
+  background: rgba(14, 6, 32, 0.95);
+  border: 2px solid var(--neon-cyan);
+  border-radius: 24px;
+  padding: 10px 24px;
+  color: #ffffff;
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  box-shadow: 0 0 25px rgba(56, 249, 255, 0.5);
+  z-index: 10000;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  pointer-events: none;
+}
+
+.cyber-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}

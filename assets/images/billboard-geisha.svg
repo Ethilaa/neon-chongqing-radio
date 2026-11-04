@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 440" width="100%" height="100%">
+  <defs>
+    <filter id="cyanGlow">
+      <feGaussianBlur stdDeviation="3" result="b2"/>
+      <feMerge>
+        <feMergeNode in="b2"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="280" height="440" fill="#090518" stroke="#38f9ff" stroke-width="2"/>
+  
+  <!-- Vertical LED Matrix column -->
+  <g fill="#38f9ff" opacity="0.3">
+    <rect x="10" y="10" width="260" height="420" fill="none" stroke="#7b5cff" stroke-width="1"/>
+  </g>
+
+  <!-- Big Red Sun Motif behind Geisha -->
+  <circle cx="140" cy="180" r="90" fill="#ff0055" opacity="0.85" filter="url(#cyanGlow)"/>
+
+  <!-- Head / Hair silhouette -->
+  <path d="M 60 210 Q 50 100 140 80 Q 230 100 220 210 Q 230 250 200 320 L 80 320 Q 50 250 60 210 Z" fill="#05010a"/>
+  
+  <!-- Cyber Hair Ornaments (Kanazashi with neon light tubes) -->
+  <line x1="50" y1="80" x2="110" y2="130" stroke="#38f9ff" stroke-width="4" filter="url(#cyanGlow)"/>
+  <circle cx="48" cy="78" r="6" fill="#ffe14d"/>
+  <line x1="230" y1="80" x2="170" y2="130" stroke="#ff3cac" stroke-width="4" filter="url(#cyanGlow)"/>
+  <circle cx="232" cy="78" r="6" fill="#38f9ff"/>
+
+  <!-- Face mask / makeup -->
+  <path d="M 95 150 Q 140 135 185 150 Q 190 220 140 250 Q 90 220 95 150 Z" fill="#ffffff"/>
+  
+  <!-- Geisha eye makeup & cyber eyes -->
+  <path d="M 105 178 Q 120 165 132 178" stroke="#ff0055" stroke-width="3" fill="none"/>
+  <line x1="110" y1="180" x2="128" y2="180" stroke="#38f9ff" stroke-width="3"/>
+
+  <path d="M 148 178 Q 160 165 175 178" stroke="#ff0055" stroke-width="3" fill="none"/>
+  <line x1="152" y1="180" x2="170" y2="180" stroke="#38f9ff" stroke-width="3"/>
+
+  <!-- Lip makeup (traditional red dot) -->
+  <ellipse cx="140" cy="225" rx="6" ry="4" fill="#ff0055"/>
+
+  <!-- Cyber circuit lines running down cheek -->
+  <path d="M 140 234 L 140 260 L 160 275 L 160 300" stroke="#38f9ff" stroke-width="2" fill="none" opacity="0.9"/>
+  <circle cx="160" cy="300" r="3" fill="#ffe14d"/>
+
+  <!-- Kimono collar -->
+  <path d="M 100 280 L 140 330 L 180 280 L 220 370 L 60 370 Z" fill="#13082b" stroke="#ff3cac" stroke-width="2"/>
+  <line x1="100" y1="280" x2="160" y2="350" stroke="#ffe14d" stroke-width="2"/>
+
+  <!-- Vertical Neon Calligraphy -->
+  <text x="35" y="60" font-family="sans-serif" font-weight="900" font-size="24" fill="#38f9ff" filter="url(#cyanGlow)">重</text>
+  <text x="35" y="90" font-family="sans-serif" font-weight="900" font-size="24" fill="#38f9ff" filter="url(#cyanGlow)">慶</text>
+  <text x="35" y="120" font-family="sans-serif" font-weight="900" font-size="24" fill="#ff3cac" filter="url(#cyanGlow)">電</text>
+  <text x="35" y="150" font-family="sans-serif" font-weight="900" font-size="24" fill="#ff3cac" filter="url(#cyanGlow)">脳</text>
+
+  <rect x="20" y="385" width="240" height="40" fill="#05010a" stroke="#ffe14d" stroke-width="1.5"/>
+  <text x="140" y="411" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="10" fill="#ffe14d">PLUG IN // NOW</text>
+</svg>

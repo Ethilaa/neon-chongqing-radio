@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 14" width="24" height="14" style="image-rendering:pixelated">
+  <!-- Retro Battery Case -->
+  <rect x="1" y="1" width="19" height="12" fill="none" stroke="#38f9ff" stroke-width="2"/>
+  <rect x="20" y="4" width="3" height="6" fill="#38f9ff"/>
+  <!-- Bars -->
+  <rect x="3" y="3" width="4" height="8" fill="#38f9ff"/>
+  <rect x="8" y="3" width="4" height="8" fill="#38f9ff"/>
+  <rect x="13" y="3" width="4" height="8" fill="#38f9ff"/>
+</svg>

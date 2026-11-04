@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cyberpunk City ✦ Neon Chongqing & Music Station</title>
+  <meta name="description" content="An explorable neon-soaked cyberpunk city where the player wanders districts, discovers mini games, and tunes into a music play station.">
+
+  <!-- Google Fonts: Press Start 2P & VT323 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/city.css">
+  <link rel="stylesheet" href="css/console.css">
+  <link rel="stylesheet" href="css/games.css">
+</head>
+<body>
+
+  <!-- Subtle CRT Scanlines -->
+  <div class="crt-overlay"></div>
+
+  <!-- Cute Cyberpunk Glitter Cursor (PDF Page 3) -->
+  <div id="cute-cursor-container">
+    <img src="assets/images/cute-cursor.svg" alt="Cute Cursor" class="cute-cursor-icon">
+  </div>
+
+  <!-- ========================================================================
+       1. ENTERING THE CITY - CINEMATIC SPLASH SCREEN
+       ======================================================================== -->
+  <div id="city-splash-screen">
+    <!-- Retro Pixel Skyline Background -->
+    <div class="splash-skyline-bg"></div>
+
+    <div class="splash-content-box">
+      <div class="splash-tagline">✦ NEON CHONGQING // 88.8 FM ✦</div>
+      <h1 class="splash-main-title">CYBERPUNK CITY</h1>
+      <p class="splash-desc">
+        Explore a neon-soaked cyberpunk Chongqing mega-city across multiple districts.<br>
+        Sprint across rooftops, discover arcade mini-games, sit by the glowing river with cruise ships,<br>
+        and tune into an authentic handheld music play station!
+      </p>
+
+      <div class="splash-pillars-row">
+        <span class="splash-pillar-badge">★ EXPLORATION</span>
+        <span class="splash-pillar-badge">★ MINI GAMES</span>
+        <span class="splash-pillar-badge">★ MUSIC PLAY STATION</span>
+      </div>
+
+      <button id="btn-enter-city-splash" class="splash-enter-btn">
+        <span>✦ ENTER CITY ✦ 探索赛博都市</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       TOP CONSOLIDATED HUD: Menu Button, Crew Dock, District Pill, Controls
+       ======================================================================== -->
+  <header class="top-hud-bar-container">
+    <!-- Left: Menu + Crew Dock -->
+    <div class="top-hud-left-group">
+      <button id="btn-open-menu" class="btn-open-menu-pill" title="Open Cyberpunk Menu [M]">
+        <span>✦ MENU</span>
+      </button>
+
+      <nav class="crew-quick-dock">
+        <span class="crew-dock-label">CREW:</span>
+        <button class="crew-avatar-btn active" data-char="mei" title="Mei (Rooftop Courier)">
+          <img src="assets/sprites/crew-mei.svg" alt="Mei">
+        </button>
+        <button class="crew-avatar-btn" data-char="rio" title="Rio (Street Racer)">
+          <img src="assets/sprites/crew-rio.svg" alt="Rio">
+        </button>
+        <button class="crew-avatar-btn" data-char="iki" title="Iki (Signal Hacker)">
+          <img src="assets/sprites/crew-iki.svg" alt="Iki">
+        </button>
+        <button class="crew-avatar-btn" data-char="sai" title="Sai (Gun Tinkerer)">
+          <img src="assets/sprites/crew-sai.svg" alt="Sai">
+        </button>
+        <button class="crew-avatar-btn" data-char="mimi" title="Mimi (Night-Radio Host)">
+          <img src="assets/sprites/crew-mimi.svg" alt="Mimi">
+        </button>
+      </nav>
+    </div>
+
+    <!-- Center: District Indicator Pill + 3D Camera Rotation Controls -->
+    <div class="top-hud-center-group">
+      <div id="hud-district-pill" class="district-pill dist-1" title="Click to Fast Travel to Next District">
+        <span>🌆 DISTRICT 1: DOWNTOWN</span>
+      </div>
+
+      <div class="camera-view-switcher">
+        <button id="cam-rot-left" class="cam-rot-btn" title="Rotate Camera Left [Q]">⟲</button>
+        <button id="cam-view-river" class="cam-btn active" title="Riverfront Panorama View">🌊 RIVER</button>
+        <button id="cam-view-drone" class="cam-btn" title="Rooftop Drone 3D Angle">🚁 DRONE</button>
+        <button id="cam-view-street" class="cam-btn" title="Street-Level Cyber Walk">🌆 STREET</button>
+        <button id="cam-rot-right" class="cam-rot-btn" title="Rotate Camera Right [R]">⟳</button>
+      </div>
+    </div>
+
+    <!-- Right: Rain Toggle, Now Playing Widget, Mini Games -->
+    <div class="top-hud-right-group">
+      <button id="btn-toggle-rain" class="pixel-btn" style="padding:6px 10px; font-size:8px;" title="Toggle Rain Weather">
+        <span>🌧️ RAIN: ON</span>
+      </button>
+
+      <div id="hud-np-pill" class="hud-now-playing-pill" title="Handheld Music Station">
+        <div class="hud-eq-anim">
+          <div class="hud-eq-bar"></div>
+          <div class="hud-eq-bar"></div>
+          <div class="hud-eq-bar"></div>
+        </div>
+        <span id="hud-np-title" class="hud-np-text">Chongqing City Nights</span>
+        <button id="hud-np-play-toggle" class="hud-np-btn">▶</button>
+      </div>
+
+      <button id="btn-top-minigames" class="pixel-btn pink" style="padding:6px 12px; font-size:8.5px;" title="Launch Mini Games">
+        <span>🕹️ MINI GAMES</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       3D ROTATABLE CYBERPUNK CHONGQING WORLD (PDF Page 1 & 2)
+       ======================================================================== -->
+  <main id="city-viewport">
+    <div id="world-3d-stage" class="view-river">
+      <!-- City World Canvas: Panoramic Skyline, Monorail, Hongyadong Architecture, Rooftops -->
+      <canvas id="world-canvas"></canvas>
+
+      <!-- Beautiful River Water Canvas with Cruise Ships & Shimmering Reflections -->
+      <canvas id="river-reflection-canvas"></canvas>
+    </div>
+
+    <!-- Interaction Prompt: Sit by River / Balcony / Arcade Cabinets -->
+    <div id="world-interact-prompt">✦ [E] SIT BY RIVER ✦</div>
+
+    <!-- Sitting by River View Banner (PDF Page 1: "I Really Want to Stay at Your House") -->
+    <div id="sitting-view-banner">
+      <span id="sitting-banner-text">✦ SITTING BY JIALING RIVER // WATCHING NEON CRUISE SHIPS ✦</span>
+      <button id="btn-stand-up">STAND UP [W / SPACE]</button>
+    </div>
+
+    <!-- Controls Guide Hint (Bottom Left) -->
+    <div class="world-controls-hint">
+      <div><span>[A / D]</span>: Walk & Run</div>
+      <div><span class="sprint-key">[SHIFT]</span>: Cyber Sprint / Dash!</div>
+      <div><span>[SPACE]</span>: Jump & Double-Jump (Hold to Glide)</div>
+      <div><span>[E]</span>: Sit & Interact (River Bench / Arcades)</div>
+      <div><span>[M]</span>: Cyberpunk Menu System</div>
+      <div><span>[Q / R]</span>: Rotate 3D Camera View</div>
+    </div>
+  </main>
+
+  <!-- ========================================================================
+       HANDHELD CONSOLE - EXACT 1:1 REPLICA OF PDF (Page 5)
+       ======================================================================== -->
+  <aside id="corner-player-dock">
+    <div class="handheld-shell">
+      <!-- Metallic Casing Screws in 4 Corners -->
+      <div class="shell-screw screw-tl"></div>
+      <div class="shell-screw screw-tr"></div>
+      <div class="shell-screw screw-bl"></div>
+      <div class="shell-screw screw-br"></div>
+
+      <!-- Top Cartridge Bump & Minimize Button -->
+      <div class="shell-top-bar">
+        <div class="cartridge-notch-box"></div>
+        <button id="btn-toggle-dock" class="dock-toggle-btn" title="Minimize / Expand Player">▼</button>
+      </div>
+
+      <!-- Outer LCD Frame -->
+      <div class="console-screen-frame">
+        <!-- Exact PDF Page 5 Screen -->
+        <div class="lcd-display-screen">
+          <!-- Top Border: Brackets + Dotted Line + Diamond -->
+          <div class="lcd-border-top">
+            <span>┌</span>
+            <div class="lcd-dots-line"></div>
+            <span class="lcd-diamond">✦</span>
+            <div class="lcd-dots-line"></div>
+            <span>┐</span>
+          </div>
+
+          <!-- Random Mode Area -->
+          <div class="lcd-random-mode-area">
+            <!-- Sparkles around text -->
+            <span class="lcd-sparkle sp-1">✧</span>
+            <span class="lcd-sparkle sp-2">✦</span>
+            <span class="lcd-sparkle sp-3">✦</span>
+            <span class="lcd-sparkle sp-4">✧</span>
+
+            <div class="lcd-random-title">RANDOM<br>MODE</div>
+
+            <div class="lcd-no08-badge-row">
+              <span class="lcd-star-icon">☆</span>
+              <div class="lcd-badge-pill">NO. 08</div>
+              <span class="lcd-star-icon">☆</span>
+            </div>
+          </div>
+
+          <!-- Bottom Border: Brackets + Dotted Line + Diamond -->
+          <div class="lcd-border-bottom">
+            <span>└</span>
+            <div class="lcd-dots-line"></div>
+            <span class="lcd-diamond">✦</span>
+            <div class="lcd-dots-line"></div>
+            <span>┘</span>
+          </div>
+
+          <!-- Bottom Corner Heart & Battery (PDF Page 5) -->
+          <div class="lcd-corner-icons">
+            <span class="lcd-heart">♥</span>
+            <div class="lcd-battery">
+              <div class="lcd-bat-bar"></div>
+              <div class="lcd-bat-bar"></div>
+              <div class="lcd-bat-bar"></div>
+              <div class="lcd-bat-tip"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Music Playback & Equalizer Bar -->
+        <div class="console-music-bar">
+          <div class="player-eq-row">
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+          </div>
+
+          <div class="player-track-meta">
+            <div id="radio-track-title" class="player-track-name">Chongqing City Nights</div>
+          </div>
+
+          <div class="player-controls-btns">
+            <button id="radio-btn-prev" class="player-ctrl-btn" title="Previous Track">⏮</button>
+            <button id="radio-btn-play" class="player-ctrl-btn play" title="Play / Pause">▶</button>
+            <button id="radio-btn-next" class="player-ctrl-btn" title="Next Track">⏭</button>
+            <input type="range" id="radio-vol-slider" min="0" max="1" step="0.05" value="0.7" style="width:70px; height:4px;" title="Volume">
+          </div>
+
+          <div class="player-sub-actions">
+            <label for="custom-audio-input" class="btn-upload-music">
+              <span>+ ADD MUSIC</span>
+            </label>
+            <input type="file" id="custom-audio-input" accept="audio/*" multiple>
+            <button id="btn-player-open-arcade" class="btn-open-arcade-cabinet">🕹️ PLAY GAME</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls Area Below Screen (Exact PDF Page 5) -->
+      <div class="console-controls-area">
+        <!-- Pastel Lavender D-Pad -->
+        <div class="dpad-container">
+          <div class="dpad-center"></div>
+          <button class="dpad-btn dpad-up" title="Volume Up">▲</button>
+          <button class="dpad-btn dpad-down" title="Volume Down">▼</button>
+          <button class="dpad-btn dpad-left" title="Previous Track">◀</button>
+          <button class="dpad-btn dpad-right" title="Next Track">▶</button>
+        </div>
+
+        <!-- Center: Diamond Star + Circular Speaker Holes -->
+        <div class="console-center-column">
+          <div class="console-star-emblem">✦</div>
+          <div class="circular-speaker-grille">
+            <div class="speaker-dot"></div>
+            <div class="speaker-dot"></div>
+            <div class="speaker-dot"></div>
+            <div class="speaker-dot"></div>
+            <div class="speaker-dot"></div>
+            <div class="speaker-dot"></div>
+            <div class="speaker-dot"></div>
+            <div class="speaker-dot"></div>
+            <div class="speaker-dot"></div>
+            <div class="speaker-dot"></div>
+            <div class="speaker-dot"></div>
+            <div class="speaker-dot"></div>
+            <div class="speaker-dot"></div>
+            <div class="speaker-dot"></div>
+            <div class="speaker-dot"></div>
+            <div class="speaker-dot"></div>
+            <div class="speaker-dot"></div>
+            <div class="speaker-dot"></div>
+            <div class="speaker-dot"></div>
+            <div class="speaker-dot"></div>
+          </div>
+        </div>
+
+        <!-- Pastel Lavender A and B Buttons -->
+        <div class="action-buttons-group">
+          <button class="action-round-btn btn-action-b" title="B Button: Next Track">B</button>
+          <button class="action-round-btn btn-action-a" title="A Button: Play / Pause">A</button>
+        </div>
+      </div>
+
+      <!-- SELECT & START Pill Buttons -->
+      <div class="pill-buttons-row">
+        <button class="pill-btn btn-pill-select" title="Select: Cycle Radio Stations">SELECT</button>
+        <button class="pill-btn btn-pill-start" title="Start: Launch Mini-Game Arcade">START</button>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- ========================================================================
+       MINI-GAME 1: JUMPING CRACK (ROOFTOP RUNNER) - PDF Page 3 & 5
+       ======================================================================== -->
+  <div id="arcade-modal-overlay">
+    <div class="arcade-window-shell">
+      <div class="arcade-title-bar">
+        <span>✦ JUMPING CRACK: ROOFTOP RUNNER // 跳裂缝 ✦</span>
+        <button class="arcade-close-btn" title="Close Game">✕</button>
+      </div>
+
+      <div class="arcade-game-body">
+        <!-- Welcome Screen (PDF Page 3 Wireframe) -->
+        <div class="arcade-lobby-view">
+          <div class="arcade-welcome-text">✦ HELLO AND WELCOME ✦</div>
+          <h2 class="arcade-hero-title">JUMPING CRACK</h2>
+          <div style="font-family:var(--font-terminal); font-size:17px; color:var(--text-dim);">
+            Goal: Jump from building to building across rooftop cracks & collect coins!
+          </div>
+
+          <!-- Large Character Showcase -->
+          <div class="arcade-char-preview">
+            <img id="arcade-preview-img" src="assets/sprites/crew-mei.svg" alt="Character">
+            <div class="arcade-char-meta">
+              <span id="arcade-preview-name" class="name">MEI</span>
+              <span id="arcade-preview-role" class="role">Rooftop Courier</span>
+              <span id="arcade-preview-quote" class="quote">"No rooftop too high, no delivery late."</span>
+            </div>
+          </div>
+
+          <button id="btn-arcade-start-play" class="pixel-btn" style="padding:12px 32px; font-size:12px;">
+            <span>▶ PLAY GAME</span>
+          </button>
+        </div>
+
+        <!-- Active Playing Screen -->
+        <div class="arcade-playing-view">
+          <div class="arcade-hud">
+            <div>SCORE: <span id="arcade-hud-score" style="color:var(--neon-yellow);">0</span></div>
+            <div>DISTANCE: <span id="arcade-hud-dist" style="color:var(--neon-cyan);">0m</span></div>
+            <div>COINS: <span id="arcade-hud-coins" style="color:var(--neon-pink);">0</span></div>
+            <div>[SPACE / CLICK] JUMP & DOUBLE-JUMP</div>
+          </div>
+
+          <canvas id="arcade-canvas"></canvas>
+
+          <!-- Game Over Modal (PDF Page 3) -->
+          <div id="arcade-game-over-screen" class="arcade-game-over">
+            <div style="font-size:32px;">☠</div>
+            <h3 class="arcade-go-title">ROOFTOP CRACK FALL!</h3>
+            <div class="arcade-go-score">FINAL SCORE: <span id="arcade-go-score-val" style="color:#fff;">0</span></div>
+            <div style="font-family:var(--font-pixel); font-size:10px; color:var(--neon-cyan);">
+              DISTANCE LEAPED: <span id="arcade-go-dist-val" style="color:#fff;">0m</span>
+            </div>
+            <div style="display:flex; gap:12px; margin-top:8px;">
+              <button id="btn-arcade-retry" class="pixel-btn" style="font-size:10px; padding:8px 18px;">RETRY</button>
+              <button id="btn-arcade-exit" class="pixel-btn pink" style="font-size:10px; padding:8px 18px;">EXIT</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MINI-GAME 2: NEON CLAW MACHINE ("夹娃娃") - PDF Page 4 Inspo
+       ======================================================================== -->
+  <div id="claw-modal-overlay">
+    <div class="claw-window-shell">
+      <div class="claw-title-bar">
+        <span>✦ NEON CLAW MACHINE // 夹娃娃机 ✦</span>
+        <button class="claw-close-btn" title="Close Claw Game">✕</button>
+      </div>
+
+      <div class="claw-cabinet-body">
+        <div class="claw-hud-bar">
+          <div>PRIZES WON: <span id="claw-prizes-count" style="color:var(--neon-yellow);">0</span></div>
+          <div>COINS: <span id="claw-coins-count" style="color:var(--neon-pink);">5</span></div>
+          <div>CONTROLS: [A / D] OR [◀ / ▶] AIM + [DROP]</div>
+        </div>
+
+        <canvas id="claw-canvas"></canvas>
+
+        <div id="claw-status-msg" class="claw-status-text">✦ USE [◀ / ▶] TO AIM, [DROP] TO GRAB PRIZE! ✦</div>
+
+        <div class="claw-controls-row">
+          <button id="claw-btn-left" class="claw-arrow-btn" title="Move Claw Left">◀ LEFT</button>
+          <button id="claw-btn-drop" class="claw-drop-btn" title="Drop Claw to Grab">✦ DROP CLAW ✦</button>
+          <button id="claw-btn-right" class="claw-arrow-btn" title="Move Claw Right">RIGHT ▶</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       CYBERPUNK OS MENU MODAL (Flow: Home > City > Mini Games / Station / Settings)
+       ======================================================================== -->
+  <div id="cyberpunk-menu-modal">
+    <div class="menu-window-shell">
+      <div class="menu-header-bar">
+        <span class="menu-title-text">✦ CYBERPUNK CITY OS // 88.8 FM ✦</span>
+        <button class="menu-close-btn" title="Close Menu [ESC / M]">✕</button>
+      </div>
+
+      <!-- Menu Tabs -->
+      <nav class="menu-nav-tabs-bar">
+        <button class="menu-nav-tab active" data-tab="home">🏠 HOME</button>
+        <button class="menu-nav-tab" data-tab="city">🌆 CITY DISTRICTS</button>
+        <button class="menu-nav-tab" data-tab="games">🕹️ MINI GAMES</button>
+        <button class="menu-nav-tab" data-tab="music">📻 MUSIC STATION</button>
+        <button class="menu-nav-tab" data-tab="settings">⚙️ SETTINGS</button>
+      </nav>
+
+      <!-- Menu Panels -->
+      <div class="menu-panels-container">
+        <!-- Panel 1: HOME -->
+        <div id="tab-panel-home" class="menu-tab-panel active">
+          <div class="menu-card">
+            <div class="menu-card-title">✦ WELCOME TO NEON CHONGQING ✦</div>
+            <p style="font-family:var(--font-terminal); font-size:18px; color:#c9d5f5; line-height:1.4;">
+              A multi-tiered cyberpunk metropolis illuminated by neon lanterns, soaring skybridges, elevated monorails, and vibrant waterfronts. Wander the downtown alleys of District 1, play retro mini-games in the arcade, or sit by the Jialing River promenade in District 2 to take in the skyline.
+            </p>
+          </div>
+
+          <div class="menu-card">
+            <div class="menu-card-title">✦ QUICK CONTROLS & NAVIGATION ✦</div>
+            <div style="display:flex; flex-direction:column; gap:8px; font-family:var(--font-terminal); font-size:17px; color:#c9d5f5;">
+              <div><span style="color:var(--neon-cyan);">[A / D]</span>: Walk & Run left / right</div>
+              <div><span style="color:var(--neon-yellow);">[SHIFT]</span>: Cyber Sprint & Dash</div>
+              <div><span style="color:var(--neon-pink);">[SPACE / W]</span>: Jump & Double-Jump (Hold in air to Glide)</div>
+              <div><span style="color:var(--neon-cyan);">[E / ENTER]</span>: Interact with River Bench, Balcony Cafe & Arcade Cabinets</div>
+              <div><span style="color:var(--neon-yellow);">[Q / R]</span>: Rotate 3D Camera Perspective</div>
+              <div><span style="color:var(--neon-pink);">[M]</span>: Toggle Cyberpunk OS Menu</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 2: CITY DISTRICTS -->
+        <div id="tab-panel-city" class="menu-tab-panel">
+          <div class="menu-card">
+            <div class="menu-card-title">✦ DISTRICT 1: NEON DOWNTOWN & ARCADE ALLEY ✦</div>
+            <p style="font-family:var(--font-terminal); font-size:17px; color:#c9d5f5;">
+              Vibe: Dense vertical high-tech streets, Hongyadong multi-tier pagodas, noodle bars, holographic billboards, and the Heart Smasher Arcade / Claw Machine!
+            </p>
+            <button id="btn-travel-d1" class="pixel-btn pink" style="align-self:flex-start;">
+              <span>FAST TRAVEL TO DISTRICT 1</span>
+            </button>
+          </div>
+
+          <div class="menu-card">
+            <div class="menu-card-title">✦ DISTRICT 2: JIALING RIVERWALK & PROMENADE ✦</div>
+            <p style="font-family:var(--font-terminal); font-size:17px; color:#c9d5f5;">
+              Vibe: Luminous waterfront promenade, cyber cruise ship with red lanterns, shimmering water reflections, and the scenic River Pier Bench where sitting down plays Rosa Walton!
+            </p>
+            <button id="btn-travel-d2" class="pixel-btn" style="align-self:flex-start;">
+              <span>FAST TRAVEL TO DISTRICT 2</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Panel 3: MINI GAMES -->
+        <div id="tab-panel-games" class="menu-tab-panel">
+          <div class="menu-card">
+            <div class="menu-card-title">✦ GAME 1: JUMPING CRACK (ROOFTOP RUNNER) ✦</div>
+            <p style="font-family:var(--font-terminal); font-size:17px; color:#c9d5f5;">
+              Jump from building to building across rooftop cracks! Dodge patrol drones, grab neon coins, and reach record leap distances.
+            </p>
+            <button id="btn-menu-launch-jumper" class="pixel-btn" style="align-self:flex-start;">
+              <span>▶ LAUNCH JUMPING CRACK</span>
+            </button>
+          </div>
+
+          <div class="menu-card">
+            <div class="menu-card-title">✦ GAME 2: NEON CLAW MACHINE ("夹娃娃") ✦</div>
+            <p style="font-family:var(--font-terminal); font-size:17px; color:#c9d5f5;">
+              Authentic Japanese/Asian arcade crane machine from Scrapbook Page 4. Aim the claw and drop to grab cute cyberpunk plushies!
+            </p>
+            <button id="btn-menu-launch-claw" class="pixel-btn pink" style="align-self:flex-start;">
+              <span>▶ LAUNCH CLAW MACHINE</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Panel 4: MUSIC STATION -->
+        <div id="tab-panel-music" class="menu-tab-panel">
+          <div class="menu-card">
+            <div class="menu-card-title">✦ HANDHELD CONSOLE (EXACT PDF PAGE 5 REPLICA) ✦</div>
+            <p style="font-family:var(--font-terminal); font-size:17px; color:#c9d5f5;">
+              Modeled after the cute translucent cyan pocket console with mirrored RANDOM MODE, star badges, heart & battery icons, lavender D-Pad, round A/B buttons, and speaker grille!
+            </p>
+            <div style="font-family:var(--font-terminal); font-size:17px; color:var(--neon-yellow);">
+              • Station 1: Cyberpunk Edgerunners ("I Really Want to Stay at Your House" - Rosa Walton)<br>
+              • Station 2: Neon Synthwave ("Neon Overdrive 2077")<br>
+              • Station 3: Chillwave Lo-Fi ("Chongqing City Nights")<br>
+              • Custom Audio: Upload any MP3/WAV file from your device!
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 5: SETTINGS -->
+        <div id="tab-panel-settings" class="menu-tab-panel">
+          <div class="menu-card">
+            <div class="menu-card-title">✦ GRAPHICS & WEATHER EFFECTS ✦</div>
+            <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-family:var(--font-terminal); font-size:18px;">
+              <input type="checkbox" id="settings-toggle-scanlines" checked style="accent-color:var(--neon-cyan);">
+              <span>Enable CRT Scanlines Overlay</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-family:var(--font-terminal); font-size:18px;">
+              <input type="checkbox" id="settings-toggle-rain" checked style="accent-color:var(--neon-cyan);">
+              <span>Enable Atmospheric Cyberpunk Rain</span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- CDN Howler.js for Audio -->
+  <script src="https://cdn.jsdelivr.net/npm/howler@2.2.4/dist/howler.min.js"></script>
+
+  <!-- Modular Scripts -->
+  <script src="js/storage.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/cursor.js"></script>
+  <script src="js/crew.js"></script>
+  <script src="js/city.js"></script>
+  <script src="js/radio.js"></script>
+  <script src="js/rain.js"></script>
+  <script src="js/game-runner.js"></script>
+  <script src="js/game-claw.js"></script>
+  <script src="js/menu.js"></script>
+
+  <!-- Inline glue for splash entrance & top minigames button -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const splash = document.getElementById('city-splash-screen');
+      const enterBtn = document.getElementById('btn-enter-city-splash');
+      if (enterBtn && splash) {
+        enterBtn.addEventListener('click', () => {
+          splash.classList.add('hidden');
+          if (window.audioMgr) {
+            window.audioMgr.initAudioContext();
+            window.audioMgr.playClickSound();
+          }
+          // Start music player
+          if (window.consolePlayer && !window.consolePlayer.isPlaying) {
+            window.consolePlayer.playTrack(0);
+          }
+        });
+      }
+
+      // Top HUD Mini-Games button
+      const topMinigamesBtn = document.getElementById('btn-top-minigames');
+      if (topMinigamesBtn) {
+        topMinigamesBtn.addEventListener('click', () => {
+          if (window.cyberMenu) {
+            window.cyberMenu.open('games');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <filter id="c-glow">
+      <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#ff3cac"/>
+    </filter>
+  </defs>
+  <!-- Sparkle Wand / Cute Cursor Core -->
+  <polygon points="12,2 15,9 22,12 15,15 12,22 9,15 2,12 9,9" fill="#ffffff" filter="url(#c-glow)"/>
+  <polygon points="12,5 14,10 19,12 14,14 12,19 10,14 5,12 10,10" fill="#38f9ff"/>
+  <circle cx="12" cy="12" r="3" fill="#ffe14d"/>
+  <!-- Little heart ornament -->
+  <path d="M 21 21 h2 v-1 h1 v1 h1 v-1 h1 v1 h1 v2 h-1 v1 h-1 v1 h-1 v1 h-1 v-1 h-1 v-1 h-1 v-1 h-1 v-2 z" fill="#ff3cac"/>
+</svg>

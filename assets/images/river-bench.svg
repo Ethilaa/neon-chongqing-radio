@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 90" width="140" height="90">
+  <defs>
+    <filter id="benchGlow">
+      <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#ff3cac"/>
+    </filter>
+    <filter id="lampGlow">
+      <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#ffe14d"/>
+    </filter>
+  </defs>
+
+  <!-- Ground Stone Pier -->
+  <rect x="0" y="70" width="140" height="20" fill="#130926" stroke="#38f9ff" stroke-width="1.5"/>
+
+  <!-- Atmospheric Streetlamp by Bench -->
+  <line x1="18" y1="70" x2="18" y2="12" stroke="#2a154d" stroke-width="3"/>
+  <path d="M 18 12 Q 24 6 30 10 L 30 18" stroke="#ffe14d" stroke-width="2" fill="none"/>
+  <!-- Lantern Light -->
+  <circle cx="30" cy="22" r="9" fill="#ffe14d" filter="url(#lampGlow)" opacity="0.9"/>
+  <circle cx="30" cy="22" r="4" fill="#ffffff"/>
+
+  <!-- Wooden Cyber Bench -->
+  <!-- Legs -->
+  <rect x="48" y="55" width="6" height="18" rx="2" fill="#38f9ff"/>
+  <rect x="106" y="55" width="6" height="18" rx="2" fill="#38f9ff"/>
+
+  <!-- Wooden Slats Seat -->
+  <rect x="42" y="48" width="76" height="10" rx="3" fill="#2b144e" stroke="#ff3cac" stroke-width="1.5" filter="url(#benchGlow)"/>
+  <line x1="44" y1="53" x2="116" y2="53" stroke="#ffe14d" stroke-width="1"/>
+
+  <!-- Bench Backrest -->
+  <rect x="44" y="32" width="72" height="14" rx="3" fill="#220e42" stroke="#ff3cac" stroke-width="1.5"/>
+
+  <!-- Cozy Plush Pillow / Cushion -->
+  <ellipse cx="58" cy="47" rx="8" ry="4" fill="#ff71ce"/>
+
+  <!-- Signboard -->
+  <rect x="62" y="15" width="68" height="14" rx="3" fill="#090317" stroke="#38f9ff" stroke-width="1"/>
+  <text x="96" y="25" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="6" fill="#ffe14d">RIVER VIEW</text>
+</svg>

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 96" width="80" height="96" style="image-rendering:pixelated;">
+  <defs>
+    <filter id="glow-Mei">
+      <feDropShadow dx="0" dy="0" stdDeviation="1.5" flood-color="#ff3cac"/>
+    </filter>
+  </defs>
+
+  <!-- Ground Shadow -->
+  <ellipse cx="40" cy="90" rx="20" ry="4" fill="rgba(0,0,0,0.5)"/>
+
+  <!-- Body / Outfit -->
+  <!-- Legs & Cyber Boots -->
+  <rect x="29" y="70" width="8" height="18" rx="2" fill="#130826"/>
+  <rect x="28" y="80" width="10" height="7" rx="2" fill="#ff3cac"/>
+  <line x1="28" y1="84" x2="38" y2="84" stroke="#ffffff" stroke-width="1.5"/>
+
+  <rect x="43" y="70" width="8" height="18" rx="2" fill="#130826"/>
+  <rect x="42" y="80" width="10" height="7" rx="2" fill="#ff3cac"/>
+  <line x1="42" y1="84" x2="52" y2="84" stroke="#ffffff" stroke-width="1.5"/>
+
+  <!-- Cyber Jacket / Outfit -->
+  <rect x="24" y="48" width="32" height="25" rx="4" fill="#180b33" stroke="#ff3cac" stroke-width="1.5"/>
+  <rect x="33" y="50" width="14" height="20" fill="#0c041d"/>
+  <line x1="40" y1="50" x2="40" y2="70" stroke="#38f9ff" stroke-width="2"/>
+  
+  <!-- Arms & Gloves -->
+  <rect x="18" y="50" width="7" height="18" rx="3" fill="#180b33"/>
+  <rect x="17" y="64" width="8" height="6" rx="2" fill="#38f9ff"/>
+  
+  <rect x="55" y="50" width="7" height="18" rx="3" fill="#180b33"/>
+  <rect x="55" y="64" width="8" height="6" rx="2" fill="#38f9ff"/>
+
+  <!-- Back Hair -->
+  <rect x="16" y="24" width="10" height="28" rx="5" fill="#ff3cac"/><rect x="54" y="24" width="10" height="28" rx="5" fill="#ff3cac"/>
+
+  <!-- Neck -->
+  <rect x="36" y="44" width="8" height="6" fill="#fcd7b8"/>
+
+  <!-- BIG CUTE ANIME FACE -->
+  <!-- Head Base -->
+  <rect x="22" y="16" width="36" height="30" rx="8" fill="#ffe7d6" stroke="#f0c2a1" stroke-width="1"/>
+  <polygon points="30,44 40,48 50,44" fill="#ffe7d6"/>
+
+  <!-- Cute Rosy Cheeks -->
+  <ellipse cx="28" cy="36" rx="5" ry="2.5" fill="#ff4d88" opacity="0.45"/>
+  <ellipse cx="52" cy="36" rx="5" ry="2.5" fill="#ff4d88" opacity="0.45"/>
+
+  <!-- Big Kawaii Eyes -->
+  <!-- Left Eye -->
+  <rect x="26" y="25" width="9" height="12" rx="3" fill="#120521"/>
+  <rect x="27" y="28" width="7" height="8" rx="2" fill="#38f9ff"/>
+  <circle cx="28" cy="28" r="2.5" fill="#ffffff"/>
+  <circle cx="32" cy="33" r="1.2" fill="#ffffff"/>
+  <!-- Left Eyelash -->
+  <path d="M 24 25 Q 30 22 36 24" stroke="#120521" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+  <!-- Right Eye -->
+  <rect x="45" y="25" width="9" height="12" rx="3" fill="#120521"/>
+  <rect x="46" y="28" width="7" height="8" rx="2" fill="#38f9ff"/>
+  <circle cx="47" cy="28" r="2.5" fill="#ffffff"/>
+  <circle cx="51" cy="33" r="1.2" fill="#ffffff"/>
+  <!-- Right Eyelash -->
+  <path d="M 44 24 Q 50 22 56 25" stroke="#120521" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+  <!-- Nose & Sweet Smile -->
+  <circle cx="40" cy="36" r="1" fill="#e89c82"/>
+  <path d="M 37 39 Q 40 43 43 39" stroke="#ff3366" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+  <!-- Front Hair & Bangs -->
+  <path d="M 20 18 Q 40 10 60 18 Q 56 26 48 24 Q 40 28 32 24 Q 24 26 20 18 Z" fill="#ff3cac"/><rect x="22" y="18" width="6" height="14" rx="2" fill="#ff3cac"/><rect x="52" y="18" width="6" height="14" rx="2" fill="#ff3cac"/>
+
+  <!-- Cyber Accessory (Visor / Goggles / Cat ears / Headset) -->
+  <rect x="28" y="10" width="24" height="6" rx="2" fill="#38f9ff" opacity="0.9" filter="url(#glow-Mei)"/><line x1="28" y1="13" x2="52" y2="13" stroke="#fff" stroke-width="1.5"/>
+</svg>

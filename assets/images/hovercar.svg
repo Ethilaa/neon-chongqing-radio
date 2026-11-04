@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 60" width="100%" height="100%">
+  <defs>
+    <filter id="carGlow">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Sleek Cyber Chassis -->
+  <path d="M 10 38 Q 20 25 50 20 L 105 16 Q 140 18 152 35 L 145 46 L 15 46 Z" fill="#100824" stroke="#ff3cac" stroke-width="2"/>
+  
+  <!-- Neon Underglow Thrusters -->
+  <rect x="25" y="47" width="110" height="5" rx="2" fill="#38f9ff" filter="url(#carGlow)"/>
+
+  <!-- Cockpit Windshield -->
+  <path d="M 52 22 L 95 19 L 108 30 L 45 30 Z" fill="#38f9ff" opacity="0.8"/>
+
+  <!-- Headlight beam -->
+  <polygon points="150,35 155,35 160,42 148,42" fill="#ffe14d" filter="url(#carGlow)"/>
+  
+  <!-- Rear thruster flame -->
+  <polygon points="10,38 2,42 10,45" fill="#ff3cac" filter="url(#carGlow)"/>
+</svg>

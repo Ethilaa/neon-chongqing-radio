@@ -1,0 +1,152 @@
+/* ==========================================================================
+   GEAR FEATURE - Cyber Inventory & Equipment Store (Reference Page 7)
+   ========================================================================== */
+
+.gear-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+}
+
+.gear-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 6px;
+  border-bottom: 1.5px dashed var(--neon-pink);
+}
+
+.gear-title {
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  color: var(--neon-cyan);
+}
+
+.gear-coin-badge {
+  font-family: var(--font-pixel);
+  font-size: 9px;
+  color: var(--neon-yellow);
+  background: rgba(14, 6, 28, 0.9);
+  border: 1px solid var(--neon-yellow);
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 0 8px rgba(255, 225, 77, 0.3);
+}
+
+/* Gear Grid */
+.gear-grid-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.gear-item-card {
+  background: rgba(16, 7, 34, 0.9);
+  border: 1.5px solid var(--neon-violet);
+  border-radius: 6px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  transition: all 0.15s ease;
+}
+
+.gear-item-card:hover {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 10px rgba(56, 249, 255, 0.3);
+}
+
+.gear-item-card.equipped {
+  border-color: var(--neon-pink);
+  box-shadow: 0 0 12px rgba(255, 60, 172, 0.4);
+}
+
+.gear-item-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gear-item-icon {
+  width: 28px;
+  height: 28px;
+  background: #090317;
+  border: 1px solid var(--neon-cyan);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.gear-item-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.gear-item-name {
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  color: #ffffff;
+}
+
+.gear-item-type {
+  font-family: var(--font-terminal);
+  font-size: 12px;
+  color: var(--neon-cyan);
+}
+
+.gear-item-desc {
+  font-family: var(--font-terminal);
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.2;
+}
+
+.gear-item-btn {
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  padding: 5px;
+  border-radius: 3px;
+  cursor: pointer;
+  border: 1px solid;
+  text-align: center;
+  transition: all 0.1s ease;
+}
+
+.gear-item-btn.btn-buy {
+  background: rgba(255, 225, 77, 0.15);
+  border-color: var(--neon-yellow);
+  color: var(--neon-yellow);
+}
+.gear-item-btn.btn-buy:hover {
+  background: var(--neon-yellow);
+  color: #05020a;
+}
+
+.gear-item-btn.btn-equip {
+  background: rgba(56, 249, 255, 0.15);
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+}
+.gear-item-btn.btn-equip:hover {
+  background: var(--neon-cyan);
+  color: #05020a;
+}
+
+.gear-item-btn.btn-equipped {
+  background: var(--neon-pink);
+  border-color: var(--neon-pink);
+  color: #fff;
+  font-weight: bold;
+}
+
