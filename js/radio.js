@@ -410,7 +410,7 @@ class HandheldConsolePlayer {
       try {
         this.currentHowl.stop();
         this.currentHowl.unload();
-      } catch (e) {}
+      } catch (e) { }
       this.currentHowl = null;
     }
 
@@ -419,7 +419,7 @@ class HandheldConsolePlayer {
       try {
         this.html5Audio.pause();
         this.html5Audio.src = '';
-      } catch (e) {}
+      } catch (e) { }
       this.html5Audio = null;
     }
 
@@ -490,7 +490,7 @@ class HandheldConsolePlayer {
         p.then(onPlaySuccess).catch((err) => {
           console.warn('HTML5 Audio autoplay prevented. Will play on next interaction:', err);
           const resumeOnInteraction = () => {
-            if (this.html5Audio) this.html5Audio.play().catch(() => {});
+            if (this.html5Audio) this.html5Audio.play().catch(() => { });
             window.removeEventListener('click', resumeOnInteraction);
             window.removeEventListener('keydown', resumeOnInteraction);
           };
@@ -505,10 +505,10 @@ class HandheldConsolePlayer {
 
   pause() {
     if (this.currentHowl) {
-      try { this.currentHowl.pause(); } catch (e) {}
+      try { this.currentHowl.pause(); } catch (e) { }
     }
     if (this.html5Audio) {
-      try { this.html5Audio.pause(); } catch (e) {}
+      try { this.html5Audio.pause(); } catch (e) { }
     }
     this.isPlaying = false;
     this.updateDisplay();
@@ -536,8 +536,8 @@ class HandheldConsolePlayer {
       const artist = (t.artist || '').toLowerCase();
       const src = (t.src || '').toLowerCase();
       return title.includes('stay') || title.includes('rosa') ||
-             artist.includes('rosa') || artist.includes('edgerunners') ||
-             src.includes('stay') || src.includes('house');
+        artist.includes('rosa') || artist.includes('edgerunners') ||
+        src.includes('stay') || src.includes('house');
     });
 
     if (idx !== -1) {
@@ -580,7 +580,7 @@ class HandheldConsolePlayer {
     const track = this.playlist[this.currentIndex];
     if (track) {
       if (this.trackTitleEl) this.trackTitleEl.textContent = track.title;
-      
+
       // Update Handheld LCD Screen Badge
       if (this.lcdBadge) {
         this.lcdBadge.textContent = track.badge || `NO. 0${this.currentIndex + 1}`;
