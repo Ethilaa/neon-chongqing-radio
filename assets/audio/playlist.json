@@ -2,6 +2,14 @@
   {
     "title": "I Really Want to Stay at Your House",
     "artist": "Rosa Walton / Cyberpunk 2077",
+    "src": "assets/audio/I_Really_Want_To_Stay_At_Your_House_-_Samuel_Kim_feat._Lorien_(mp3.pm).mp3",
+    "badge": "EDGERUNNERS",
+    "stationId": "edgerunners",
+    "stationName": "CYBERPUNK EDGERUNNERS"
+  },
+  {
+    "title": "I Really Want to Stay at Your House",
+    "artist": "Rosa Walton / Cyberpunk 2077",
     "src": "assets/audio/i_really_want_to_stay_at_your_house.wav",
     "badge": "EDGERUNNERS",
     "stationId": "edgerunners",
